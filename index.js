@@ -145,7 +145,9 @@ if(envsAreOk){
                                                 logFileKeyvaultAndSql(reportFile, bdPassKey, username, newPassword); 
                                             }
                                         } catch (error) {
+                                            // TODO: Create and error log
                                             console.log(error);
+                                            processValid = false;
                                         }
                                     }else {
                                         const isValueSettedInKeyvault = await setValueInKeyvault(keyvaultClient, bdPassKey, newPassword, username, reportFile);
@@ -158,6 +160,8 @@ if(envsAreOk){
                             }
                         }
                     }catch (error) {
+                        // TODO: Create and error log
+                        console.log(error);
                         processValid = false;
                     }
                 }
