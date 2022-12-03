@@ -1,0 +1,35 @@
+{
+  "name": "keysdownloader",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "application to download envs from keyvault",
+  "main": "index.js",
+  "bin": {
+    "env-downloader": "index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@azure/identity": "^3.0.0",
+    "@azure/keyvault-secrets": "^4.6.0",
+    "command-line-args": "^5.2.1",
+    "dotenv": "^8.2.0",
+    "has-flag": "^5.0.1",
+    "mssql": "^9.0.1"
+  },
+  "keywords": [
+    "cli.",
+    "envs",
+    "keyvault"
+  ],
+  "devDependencies": {
+    "prettier": "^2.7.1"
+  },
+  "author": {
+    "name": "Pablo Llorach",
+    "email": "pablo.llorach@dualbootpartners.com",
+    "url": "www.dualbootpartners.com"
+  },
+  "license": "ISC"
+}
