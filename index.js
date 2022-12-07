@@ -7,7 +7,9 @@ import {
     logFileKeyvaultOnly,
     randomString,
     consoleLogInsertionInKeyvaultAndSql,
-    consoleLogInsertionInKeyvaultOnly
+    consoleLogInsertionInKeyvaultOnly,
+    setValueInDatabase,
+    setValueInKeyvault
 } from "./src/utils.js";
 
 import { SecretClient } from "@azure/keyvault-secrets";
@@ -63,10 +65,10 @@ const clientSecret = process.env.CLIENT_SECRET;
 const keyVaultName = process.env.VAULT;
 const randomSecretEnabled = process.env.RANDOM_SECRET_ENABLED === 'true';
 const randomSecretSize = parseInt(process.env.RANDOM_SECRET_SIZE, 10);
-const sqlInsertionEnable = proces.env.SQL_INSERTION_ENABLE === 'true';
-const sqlUser = proces.env.SQL_USER;
+const sqlInsertionEnable = process.env.SQL_INSERTION_ENABLE === 'true';
+const sqlUser = process.env.SQL_USER;
 const sqlPassword = process.env.SQL_PASSWORD;
-const sqlServer = proces.env.SQL_SERVER;
+const sqlServer = process.env.SQL_SERVER;
 const sqlDatabase = process.env.SQL_DATABASE;
 const sqlPort = parseInt(process.env.SQL_PORT, 10);
 
@@ -138,11 +140,18 @@ if(envsAreOk){
                                             let isValueSettedInKeyvault = false;
                                             if(isValueSettedInDatabase){
                                                 isValueSettedInKeyvault = await setValueInKeyvault(keyvaultClient, bdPassKey, newPassword, username, reportFile);
+                                                if(!isValueSettedInKeyvault){
+                                                    console.log(`ERROR: Password for ${bdPassKey} was not changed on Keyvault.`);
+                                                }
+                                            }else{
+                                                console.log(`ERROR: Password for ${username} was not changed on database.`);
                                             }
                                             
                                             if(isValueSettedInDatabase && isValueSettedInKeyvault){
                                                 consoleLogInsertionInKeyvaultAndSql(bdPassKey, username);
                                                 logFileKeyvaultAndSql(reportFile, bdPassKey, username, newPassword); 
+                                            }else{
+                                                isValueSettedInKeyvault = false;
                                             }
                                         } catch (error) {
                                             // TODO: Create and error log
@@ -157,6 +166,8 @@ if(envsAreOk){
                                         }
                                     }
                                 }
+                            }else {
+                                console.log(`${bdPassKey} has been discarded.`)
                             }
                         }
                     }catch (error) {
